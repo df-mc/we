@@ -34,10 +34,10 @@ func (w *World) SetPos2(pos mgl64.Vec3) {
 // SetBlocks will set every block between the two vec3 values that the player have set to this world.
 // It returns the amount of blocks that were placed.
 func (w *World) SetBlocks(b world.Block) (n int) {
-	positions := w.Positions()
-	coords := positions.BlocksCoordinatesBetween()
+	coords := w.Positions().BlocksCoordinatesBetween()
 	for _, i := range coords {
 		w.World.SetBlock(cube.PosFromVec3(i), b)
+		n++
 	}
-	return len(positions.BlocksCoordinatesBetween())
+	return n
 }

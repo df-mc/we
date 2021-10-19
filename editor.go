@@ -29,7 +29,7 @@ func (e *Editor) World(world *world.World) *World {
 			return w
 		}
 	}
-	world2 := &World{World: world, pos: &Positions{}}
+	world2 := NewWorld(world)
 	e.worlds = append(e.worlds, world2)
 	return world2
 }

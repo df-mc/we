@@ -26,8 +26,7 @@ func (p *Positions) MinXYZ() (float64, float64, float64) {
 
 // BlocksCoordinatesBetween returns the blocks coordinates between the two vec3 values.
 // This will let us know which coordinate to act on.
-func (p *Positions) BlocksCoordinatesBetween() []mgl64.Vec3 {
-	var coords []mgl64.Vec3
+func (p *Positions) BlocksCoordinatesBetween() (coords []mgl64.Vec3) {
 
 	maxX, maxY, maxZ := p.MaxXYZ()
 	minX, minY, minZ := p.MinXYZ()

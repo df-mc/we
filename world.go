@@ -9,17 +9,17 @@ import (
 // World is a type that contains *world.World from dragonfly, it also contains a *Positions value which contains two vec3 values.
 type World struct {
 	*world.World
-	pos *Positions
+	pos *CubicPositions
 }
 
 // NewWorld returns a new *World containing the *world.World passed
 func NewWorld(w *world.World) *World {
 	noValueVec3 := mgl64.Vec3{}
-	return &World{World: w, pos: NewPositions(noValueVec3, noValueVec3)}
+	return &World{World: w, pos: NewCubicPositions(noValueVec3, noValueVec3)}
 }
 
 // Positions returns the positions that the player set on this *world.World.
-func (w *World) Positions() *Positions { return w.pos }
+func (w *World) Positions() *CubicPositions { return w.pos }
 
 // SetPos1 sets the first position of the player to this world's *Positions.
 func (w *World) SetPos1(pos mgl64.Vec3) {

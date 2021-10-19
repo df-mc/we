@@ -6,7 +6,7 @@ import (
 	"github.com/go-gl/mathgl/mgl64"
 )
 
-// World is a type that contains *world.World from dragonfly, it also contains a *Positions value which contains two vec3 values.
+// World is a type that contains *world.World from dragonfly, it also contains a *CubicPositions value which contains two vec3 values.
 type World struct {
 	*world.World
 	pos *CubicPositions
@@ -21,12 +21,12 @@ func NewWorld(w *world.World) *World {
 // Positions returns the positions that the player set on this *world.World.
 func (w *World) Positions() *CubicPositions { return w.pos }
 
-// SetPos1 sets the first position of the player to this world's *Positions.
+// SetPos1 sets the first position of the player to this world's *CubicPositions.
 func (w *World) SetPos1(pos mgl64.Vec3) {
 	w.Positions().Pos1 = pos
 }
 
-// SetPos2 sets the Second position of the player to this world's *Positions.
+// SetPos2 sets the Second position of the player to this world's *CubicPositions.
 func (w *World) SetPos2(pos mgl64.Vec3) {
 	w.Positions().Pos2 = pos
 }

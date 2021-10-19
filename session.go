@@ -2,7 +2,7 @@ package worldedit
 
 import "github.com/df-mc/dragonfly/server/player"
 
-// Session is a type that contains []*Editor to keep track of all player world *Positions
+// Session is a type that contains []*Editor to keep track of all player world *CubicPositions
 type Session struct {
 	Editors []*Editor
 }

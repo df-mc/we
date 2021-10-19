@@ -11,7 +11,7 @@ type CubicPositions struct {
 	Pos2 mgl64.Vec3
 }
 
-// NewCubicPositions returns a *Positions with the two vec3 values passed
+// NewCubicPositions returns a *CubicPositions with the two vec3 values passed
 func NewCubicPositions(pos1, pos2 mgl64.Vec3) *CubicPositions { return &CubicPositions{Pos1: pos1, Pos2: pos2} }
 
 // MaxXYZ returns the biggest value of X, Y, Z in the two vec3 values.

@@ -12,6 +12,12 @@ type World struct {
 	pos *Positions
 }
 
+// NewWorld returns a new *World containing the *world.World passed
+func NewWorld(w *world.World) *World {
+	noValueVec3 := mgl64.Vec3{}
+	return &World{World: w, pos: NewPositions(noValueVec3, noValueVec3)}
+}
+
 // Positions returns the positions that the player set on this *world.World.
 func (w *World) Positions() *Positions { return w.pos }
 
@@ -26,7 +32,7 @@ func (w *World) SetPos2(pos mgl64.Vec3) {
 }
 
 // SetBlocks will set every block between the two vec3 values that the player have set to this world.
-// It returns the amount of blocks that were placed
+// It returns the amount of blocks that were placed.
 func (w *World) SetBlocks(b world.Block) (n int) {
 	positions := w.Positions()
 	coords := positions.BlocksCoordinatesBetween()

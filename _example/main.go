@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/df-mc/dragonfly/server"
 	"github.com/df-mc/dragonfly/server/cmd"
-	"github.com/df-mc/we/example/commands"
+	"github.com/df-mc/we/_example/commands"
 )
 
 func main() {

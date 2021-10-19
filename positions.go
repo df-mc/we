@@ -6,8 +6,8 @@ import (
 )
 
 type Positions struct {
-	Pos1 *mgl64.Vec3
-	Pos2 *mgl64.Vec3
+	Pos1 mgl64.Vec3
+	Pos2 mgl64.Vec3
 }
 
 func (p *Positions) MaxXYZ() (float64, float64, float64) {

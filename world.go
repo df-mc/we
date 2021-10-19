@@ -1,34 +1,37 @@
 package worldedit
 
 import (
-	"errors"
 	"github.com/df-mc/dragonfly/server/block/cube"
 	"github.com/df-mc/dragonfly/server/world"
 	"github.com/go-gl/mathgl/mgl64"
 )
 
+// World is a type that contains *world.World from dragonfly, it also contains a *Positions value which contains two vec3 values.
 type World struct {
 	*world.World
 	pos *Positions
 }
 
+// Positions returns the positions that the player set on this *world.World.
 func (w *World) Positions() *Positions { return w.pos }
 
+// SetPos1 sets the first position of the player to this world's *Positions.
 func (w *World) SetPos1(pos mgl64.Vec3) {
-	w.Positions().Pos1 = &pos
-}
-func (w *World) SetPos2(pos mgl64.Vec3) {
-	w.Positions().Pos2 = &pos
+	w.Positions().Pos1 = pos
 }
 
-func (w *World) SetBlock(b world.Block) error {
+// SetPos2 sets the Second position of the player to this world's *Positions.
+func (w *World) SetPos2(pos mgl64.Vec3) {
+	w.Positions().Pos2 = pos
+}
+
+// SetBlocks will set every block between the two vec3 values that the player have set to this world.
+// It returns the amount of blocks that were placed
+func (w *World) SetBlocks(b world.Block) (n int) {
 	positions := w.Positions()
-	if positions.Pos1 == nil || positions.Pos2 == nil {
-		return errors.New("could not complete SetBlock action: pos1 or pos2 is nil")
-	}
 	coords := positions.BlocksCoordinatesBetween()
 	for _, i := range coords {
 		w.World.SetBlock(cube.PosFromVec3(i), b)
 	}
-	return nil
+	return len(positions.BlocksCoordinatesBetween())
 }

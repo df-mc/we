@@ -14,6 +14,8 @@ type set struct {
 
 func (s set) Run(src cmd.Source, output *cmd.Output) {
 	if p, ok := src.(*player.Player); ok {
+		// This is only working with some blocks since there is no properties argument right now
+		// You can test with the 'cobblestone' block
 		if b, ok := world.BlockByName("minecraft:" + s.Block, nil); ok {
 
 			e := Session.EditorByPlayer(p)

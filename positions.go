@@ -14,7 +14,7 @@ func (p *Positions) MaxXYZ() (float64, float64, float64) {
 	return math.Max(p.Pos1.X(), p.Pos2.X()), math.Max(p.Pos1.Y(), p.Pos2.Y()), math.Max(p.Pos1.Z(), p.Pos2.Z())
 }
 func (p *Positions) MinXYZ() (float64, float64, float64) {
-	return math.Min(p.Pos1.X(), p.Pos2.X()), math.Max(p.Pos1.Y(), p.Pos2.Y()), math.Max(p.Pos1.Z(), p.Pos2.Z())
+	return math.Min(p.Pos1.X(), p.Pos2.X()), math.Min(p.Pos1.Y(), p.Pos2.Y()), math.Min(p.Pos1.Z(), p.Pos2.Z())
 }
 func (p *Positions) BlocksCoordinatesBetween() []mgl64.Vec3 {
 	var coords []mgl64.Vec3

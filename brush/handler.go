@@ -16,13 +16,25 @@ func LookupHandler(p *player.Player) (*Handler, bool) {
 }
 
 type Handler struct {
-	p *player.Player
+	p    *player.Player
+	undo []func()
 }
 
 func NewHandler(p *player.Player) *Handler {
 	h := &Handler{p: p}
 	handlers.Store(p, h)
 	return h
+}
+
+// UndoLatest undoes the latest brush action. If no action was left to undo, false is returned.
+func (h *Handler) UndoLatest() bool {
+	if len(h.undo) == 0 {
+		return false
+	}
+	offset := len(h.undo) - 1
+	h.undo[offset]()
+	h.undo = h.undo[:offset]
+	return true
 }
 
 func (h *Handler) HandleItemUse(ctx *event.Context) {

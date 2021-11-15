@@ -42,7 +42,10 @@ func (b Brush) UUID() uuid.UUID {
 var aabb = physics.NewAABB(mgl64.Vec3{-0.125, -0.125, -0.125}, mgl64.Vec3{0.125, 0.125, 0.125})
 
 func (b Brush) Use(p *player.Player) {
-	const maxDistance = 128
+	const (
+		maxDistance  = 128
+		maxUndoCount = 40
+	)
 	vec := entity.DirectionVector(p).Mul(maxDistance)
 	pos := p.Position().Add(mgl64.Vec3{0, p.EyeHeight()})
 
@@ -50,7 +53,14 @@ func (b Brush) Use(p *player.Player) {
 	if res, ok := trace.Perform(pos, final, p.World(), aabb, func(w world.Entity) bool { return w == p }); ok {
 		final = res.Position()
 	}
-	Perform(cube.PosFromVec3(final), b.s, b.a, p.World())
+
+	h, _ := LookupHandler(p)
+	revert := Perform(cube.PosFromVec3(final), b.s, b.a, p.World())
+	if len(h.undo) == maxUndoCount {
+		h.undo = append(h.undo[1:], revert)
+		return
+	}
+	h.undo = append(h.undo, revert)
 }
 
 // Bind binds the Brush to the item.Stack i passed and returns a new item.Stack with the Brush bound to it.

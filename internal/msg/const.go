@@ -1,20 +1,25 @@
 package msg
 
 const (
-	BrushSelection = "Brush selection"
-	BrushShape     = "Brush shape"
-	BrushRadius    = "Brush radius"
-	BrushAction    = "Brush action"
-	FillMenu       = "Fill menu"
 	BlockPalette   = "Block palette"
 	InvalidPalette = "Palette must exist and be non-empty."
 )
 
 const (
-	BindNeedsItem = "You must hold an item to bind a brush."
-	AlreadyBound  = "You can only bind one brush to an item."
-	NotBound      = "The item held is not currently bound to a brush."
-	BrushUnbound  = "Unbound brush from held item."
+	BrushSelection = "Brush selection"
+	BrushShape     = "Brush shape"
+	BrushRadius    = "Brush radius"
+	BrushAction    = "Brush action"
+	FillMenu       = "Fill menu"
+)
+
+const (
+	BindNeedsItem  = "You must hold an item to bind a brush."
+	AlreadyBound   = "You can only bind one brush to an item."
+	NotBound       = "The item held is not currently bound to a brush."
+	BrushUnbound   = "Unbound brush from held item."
+	NoUndo         = "No actions left to undo."
+	UndoSuccessful = "Undid the last brush action. (%v left)"
 )
 
 const (

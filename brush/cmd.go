@@ -51,6 +51,24 @@ func (c UnbindCommand) Run(src cmd.Source, o *cmd.Output) {
 	o.Printf(text.Colourf("<green>%v</green>", msg.BrushUnbound))
 }
 
+// UndoCommand implements the undoing of one of the most recent actions performed by a player using a Brush.
+type UndoCommand struct {
+	Sub undo
+}
+
+func (UndoCommand) Allow(src cmd.Source) bool { return pl(src) }
+
+// Run implements the undoing of an action performed with a Brush.
+func (c UndoCommand) Run(src cmd.Source, o *cmd.Output) {
+	p := src.(*player.Player)
+	h, _ := LookupHandler(p)
+	if !h.UndoLatest() {
+		o.Errorf(msg.NoUndo)
+		return
+	}
+	o.Printf(text.Colourf("<green>%v</green>", msg.UndoSuccessful, len(h.undo)))
+}
+
 // pl checks if the cmd.Source passed is a *player.Player and returns true if so.
 func pl(src cmd.Source) bool {
 	_, ok := src.(*player.Player)
@@ -64,3 +82,7 @@ func (bind) SubName() string { return "bind" }
 type unbind string
 
 func (unbind) SubName() string { return "unbind" }
+
+type undo string
+
+func (undo) SubName() string { return "undo" }

@@ -9,7 +9,7 @@ import (
 
 // Perform performs the world edit action passed in a specific shape, in the world that is passed. Perform
 // will only ever edit blocks found within the shape passed.
-// Perform returns a function which may be called to revert the modification.
+// Perform returns a function which may be called to undo the modification.
 func Perform(pos cube.Pos, s Shape, a Action, w *world.World) (revert func()) {
 	d := s.Dim()
 	// The shapes measure according to a centre position, so the base of our structure is offset.
@@ -64,14 +64,13 @@ func (s *structure) blockAt(x, y, z int) world.Block {
 // Revert reverts the placement of the structure, placing back all blocks that were changed by the initial
 // placement.
 func (s *structure) Revert() {
-	s.w.BuildStructure(s.base, &structureRevert{base: s.base, d: s.d, m: s.m})
+	s.w.BuildStructure(s.base, &structureRevert{d: s.d, m: s.m})
 }
 
 // structureRevert represents a structure that handles the reverting of a normal structure.
 type structureRevert struct {
-	base cube.Pos
-	d    [3]int
-	m    map[cube.Pos]world.Block
+	d [3]int
+	m map[cube.Pos]world.Block
 }
 
 // Dimensions ...
@@ -81,6 +80,6 @@ func (s *structureRevert) Dimensions() [3]int {
 
 // At ...
 func (s *structureRevert) At(x, y, z int, _ func(x, y, z int) world.Block) (world.Block, world.Liquid) {
-	b, _ := s.m[cube.Pos{x + s.base[0], y + s.base[1], z + s.base[2]}]
+	b, _ := s.m[cube.Pos{x, y, z}]
 	return b, nil
 }

@@ -1,7 +1,6 @@
 package brush
 
-// Shape represents a shape in which world editing actions may be performed. Any Shape may be combined with an
-// act.Action to produce a specific result.
+// Shape represents a shape over which an Action may be performed through a call to Perform.
 type Shape interface {
 	// Inside checks if a specific X, Y and Z is within the shape with centre position (cx, cy, cz). If this is
 	// the case, Inside returns true.

@@ -10,10 +10,9 @@ import (
 // SetCommand implements the selection of a Selection palette in the world that a player is in. This palette may
 // later be saved using SaveCommand.
 type SetCommand struct {
+	command
 	Sub set
 }
-
-func (SetCommand) Allow(src cmd.Source) bool { return pl(src) }
 
 // Run enables palette selection for the *player.Player that runs the command.
 func (c SetCommand) Run(src cmd.Source, o *cmd.Output) {
@@ -26,13 +25,12 @@ func (c SetCommand) Run(src cmd.Source, o *cmd.Output) {
 
 // SaveCommand implements the saving of palettes to disk, so that they may be re-used.
 type SaveCommand struct {
+	command
 	Sub save
 	// Name is the name by which the palette currently selected should be saved. The palette will be saved to a
 	// database so that it can be reloaded when the server restarts.
 	Name string `name:"name"`
 }
-
-func (SaveCommand) Allow(src cmd.Source) bool { return pl(src) }
 
 // Run allows a *player.Player to save the Selection previously created using /palette to disk with a specific name,
 // so that it can be re-used.
@@ -51,18 +49,17 @@ func (s SaveCommand) Run(src cmd.Source, o *cmd.Output) {
 		return
 	}
 	h.palettes.Store(s.Name, NewBlocks(h.m.Blocks()))
-	o.Printf(text.Colourf("<green>%v</green>", msg.PaletteSaved, h.m.Min, h.m.Max, s.Name))
+	o.Printf(text.Colourf("<green>%v</green>", msg.PaletteSaved), h.m.Min, h.m.Max, s.Name)
 }
 
 // DeleteCommand implements the deletion of palettes previously saved using SaveCommand.
 type DeleteCommand struct {
+	command
 	Sub del
 	// Name is the name of the palette to delete. Upon deleting, the palette will be removed from the database
 	// it is stored in.
 	Name paletteName `name:"name"`
 }
-
-func (DeleteCommand) Allow(src cmd.Source) bool { return pl(src) }
 
 // Run allows a *player.Player to delete a palette previously saved using /palette save.
 func (d DeleteCommand) Run(src cmd.Source, o *cmd.Output) {
@@ -76,28 +73,19 @@ func (d DeleteCommand) Run(src cmd.Source, o *cmd.Output) {
 		return
 	}
 	h.palettes.Delete(name)
-	o.Printf(text.Colourf("<green>%v</green>", msg.PaletteDeleted, name))
+	o.Printf(text.Colourf("<green>%v</green>", msg.PaletteDeleted), name)
 }
 
-// pl checks if the cmd.Source passed is a *player.Player and returns true if so.
-func pl(src cmd.Source) bool {
-	_, ok := src.(*player.Player)
-	return ok
-}
+type (
+	set         string
+	save        string
+	del         string
+	paletteName string
+)
 
-type set string
-
-func (set) SubName() string { return "set" }
-
-type save string
-
+func (set) SubName() string  { return "set" }
 func (save) SubName() string { return "save" }
-
-type del string
-
-func (del) SubName() string { return "delete" }
-
-type paletteName string
+func (del) SubName() string  { return "delete" }
 
 func (p paletteName) Type() string { return "PaletteName" }
 func (p paletteName) Options(src cmd.Source) []string {
@@ -112,4 +100,14 @@ func (p paletteName) Options(src cmd.Source) []string {
 		return true
 	})
 	return m
+}
+
+// command is a base struct used throughout commands in the we repository. It implements cmd.Allower to prevent
+// non-player sources from using the command.
+type command struct{}
+
+// Allow returns false if the cmd.Source passed is not of the type *player.Player.
+func (command) Allow(src cmd.Source) bool {
+	_, ok := src.(*player.Player)
+	return ok
 }

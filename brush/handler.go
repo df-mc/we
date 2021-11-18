@@ -6,6 +6,7 @@ import (
 	"sync"
 )
 
+// handlers is a map holding handlers of players.
 var handlers sync.Map
 
 // LookupHandler finds the Handler of a specific player.Player, assuming it is currently online.
@@ -15,11 +16,14 @@ func LookupHandler(p *player.Player) (*Handler, bool) {
 	return h, ok
 }
 
+// Handler implements the brushing of players. It enables activation of brushes and stores the data needed to
+// undo/redo those actions.
 type Handler struct {
 	p    *player.Player
 	undo []func()
 }
 
+// NewHandler creates a new Handler for the *player.Player passed.
 func NewHandler(p *player.Player) *Handler {
 	h := &Handler{p: p}
 	handlers.Store(p, h)
@@ -37,14 +41,16 @@ func (h *Handler) UndoLatest() bool {
 	return true
 }
 
+// HandleItemUse activates the brush on a player's item if present.
 func (h *Handler) HandleItemUse(ctx *event.Context) {
 	held, _ := h.p.HeldItems()
 	if b, ok := find(held); ok {
 		ctx.Cancel()
-		b.Use(h.p)
+		go b.Use(h.p)
 	}
 }
 
+// HandleQuit deletes the Handler from the handlers map.
 func (h *Handler) HandleQuit() {
 	handlers.Delete(h.p)
 }

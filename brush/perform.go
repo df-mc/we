@@ -14,7 +14,7 @@ func Perform(pos cube.Pos, s Shape, a Action, w *world.World) (revert func()) {
 	d := s.Dim()
 	// The shapes measure according to a centre position, so the base of our structure is offset.
 	base := pos.Add(cube.Pos{-d[0] / 2, -d[1] / 2, -d[2] / 2})
-	st := &structure{base: base, s: s, a: a, d: d, w: w, cx: pos[0], cy: pos[1], cz: pos[2], m: make(map[cube.Pos]world.Block)}
+	st := &structure{base: base, s: s, a: a, d: d, w: w, cx: pos[0], cy: pos[1], cz: pos[2], m: make(map[cube.Pos]world.Block), r: rand.New(rand.NewSource(time.Now().UnixNano()))}
 	w.BuildStructure(base, st)
 	return st.Revert
 }
@@ -29,6 +29,7 @@ type structure struct {
 	w          *world.World
 	m          map[cube.Pos]world.Block
 	bAt        func(x, y, z int) world.Block
+	r          *rand.Rand
 }
 
 // Dimensions returns the dimensions of the shape.
@@ -40,9 +41,8 @@ func (s *structure) Dimensions() [3]int {
 // At returns the block returned by the type held. If not, nil is returned.
 func (s *structure) At(x, y, z int, at func(x, y, z int) world.Block) (world.Block, world.Liquid) {
 	s.bAt = at
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	if s.s.Inside(s.cx, s.cy, s.cz, x+s.cx-s.d[0]/2, y+s.cy-s.d[1]/2, z+s.cz-s.d[2]/2) {
-		if v, liq := s.a.At(x, y, z, r, s.w, s.blockAt); v != nil {
+		if v, liq := s.a.At(x, y, z, s.r, s.w, s.blockAt); v != nil {
 			s.m[cube.Pos{x, y, z}] = at(x, y, z)
 			s.bAt = nil
 			return v, liq

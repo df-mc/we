@@ -1,8 +1,12 @@
 package msg
 
 const (
-	BlockPalette   = "Block palette"
-	InvalidPalette = "Palette must exist and be non-empty."
+	BlockPalette    = "Block palette"
+	InvalidPalette  = "Palette must exist and be non-empty."
+	ReplacedPalette = "Block palette to be replaced"
+
+	FillMenu    = "Fill menu"
+	ReplaceMenu = "Replace menu"
 )
 
 const (
@@ -10,7 +14,6 @@ const (
 	BrushShape     = "Brush shape"
 	BrushRadius    = "Brush radius"
 	BrushAction    = "Brush action"
-	FillMenu       = "Fill menu"
 )
 
 const (

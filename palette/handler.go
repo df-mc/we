@@ -112,7 +112,7 @@ func (h *Handler) visualisePalette() {
 				continue
 			}
 			a := m.Area
-			a.Min = a.Min.Subtract(unit)
+			a.Min = a.Min.Sub(unit)
 			a.Range(func(x, y, z int) {
 				i := 0
 				if x == a.Min[0] || x == a.Max[0] {

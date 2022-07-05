@@ -3,6 +3,7 @@ package we
 import (
 	"github.com/df-mc/dragonfly/server/block/cube"
 	"github.com/df-mc/dragonfly/server/event"
+	"github.com/df-mc/dragonfly/server/item"
 	"github.com/df-mc/dragonfly/server/player"
 	_ "github.com/df-mc/we/act"
 	"github.com/df-mc/we/brush"
@@ -28,8 +29,8 @@ func (h *Handler) HandleItemUseOnBlock(ctx *event.Context, pos cube.Pos, face cu
 	h.ph.HandleItemUseOnBlock(ctx, pos, face, vec)
 }
 
-func (h *Handler) HandleBlockBreak(ctx *event.Context, pos cube.Pos) {
-	h.ph.HandleBlockBreak(ctx, pos)
+func (h *Handler) HandleBlockBreak(ctx *event.Context, pos cube.Pos, drops *[]item.Stack) {
+	h.ph.HandleBlockBreak(ctx, pos, drops)
 }
 
 func (h *Handler) HandleQuit() {

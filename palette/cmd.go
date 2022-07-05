@@ -11,7 +11,7 @@ import (
 // later be saved using SaveCommand.
 type SetCommand struct {
 	command
-	Sub set
+	Sub cmd.SubCommand `cmd:"set"`
 }
 
 // Run enables palette selection for the *player.Player that runs the command.
@@ -26,10 +26,10 @@ func (c SetCommand) Run(src cmd.Source, o *cmd.Output) {
 // SaveCommand implements the saving of palettes to disk, so that they may be re-used.
 type SaveCommand struct {
 	command
-	Sub save
+	Sub cmd.SubCommand `cmd:"save"`
 	// Name is the name by which the palette currently selected should be saved. The palette will be saved to a
 	// database so that it can be reloaded when the server restarts.
-	Name string `name:"name"`
+	Name string `cmd:"name"`
 }
 
 // Run allows a *player.Player to save the Selection previously created using /palette to disk with a specific name,
@@ -55,10 +55,10 @@ func (s SaveCommand) Run(src cmd.Source, o *cmd.Output) {
 // DeleteCommand implements the deletion of palettes previously saved using SaveCommand.
 type DeleteCommand struct {
 	command
-	Sub del
+	Sub cmd.SubCommand `cmd:"delete"`
 	// Name is the name of the palette to delete. Upon deleting, the palette will be removed from the database
 	// it is stored in.
-	Name paletteName `name:"name"`
+	Name paletteName `cmd:"name"`
 }
 
 // Run allows a *player.Player to delete a palette previously saved using /palette save.
@@ -76,16 +76,7 @@ func (d DeleteCommand) Run(src cmd.Source, o *cmd.Output) {
 	o.Printf(text.Colourf("<green>%v</green>", msg.PaletteDeleted), name)
 }
 
-type (
-	set         string
-	save        string
-	del         string
-	paletteName string
-)
-
-func (set) SubName() string  { return "set" }
-func (save) SubName() string { return "save" }
-func (del) SubName() string  { return "delete" }
+type paletteName string
 
 func (p paletteName) Type() string { return "PaletteName" }
 func (p paletteName) Options(src cmd.Source) []string {

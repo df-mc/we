@@ -10,7 +10,7 @@ import (
 // BindCommand implements the binding of a Brush to an item in the player's inventory.
 type BindCommand struct {
 	command
-	Sub bind
+	Sub cmd.SubCommand `cmd:"bind"`
 }
 
 // Run implements the binding of a Brush to the held item by sending a brush selection form.
@@ -33,7 +33,7 @@ func (BindCommand) Run(src cmd.Source, o *cmd.Output) {
 // /brush bind.
 type UnbindCommand struct {
 	command
-	Sub unbind
+	Sub cmd.SubCommand `cmd:"unbind"`
 }
 
 // Run implements the unbinding of a Brush bound to the item held.
@@ -52,7 +52,7 @@ func (c UnbindCommand) Run(src cmd.Source, o *cmd.Output) {
 // UndoCommand implements the undoing of one of the most recent actions performed by a player using a Brush.
 type UndoCommand struct {
 	command
-	Sub undo
+	Sub cmd.SubCommand `cmd:"undo"`
 }
 
 // Run implements the undoing of an action performed with a Brush.
@@ -65,16 +65,6 @@ func (c UndoCommand) Run(src cmd.Source, o *cmd.Output) {
 	}
 	o.Printf(text.Colourf("<green>%v</green>", msg.UndoSuccessful), len(h.undo))
 }
-
-type (
-	bind   string
-	unbind string
-	undo   string
-)
-
-func (bind) SubName() string   { return "bind" }
-func (unbind) SubName() string { return "unbind" }
-func (undo) SubName() string   { return "undo" }
 
 // command is a base struct used throughout commands in the we repository. It implements cmd.Allower to prevent
 // non-player sources from using the command.

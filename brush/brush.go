@@ -2,9 +2,8 @@ package brush
 
 import (
 	"github.com/df-mc/dragonfly/server/block/cube"
+	"github.com/df-mc/dragonfly/server/block/cube/trace"
 	"github.com/df-mc/dragonfly/server/entity"
-	"github.com/df-mc/dragonfly/server/entity/physics"
-	"github.com/df-mc/dragonfly/server/entity/physics/trace"
 	"github.com/df-mc/dragonfly/server/item"
 	"github.com/df-mc/dragonfly/server/player"
 	"github.com/df-mc/dragonfly/server/world"
@@ -39,7 +38,7 @@ func (b Brush) UUID() uuid.UUID {
 	return b.id
 }
 
-var aabb = physics.NewAABB(mgl64.Vec3{-0.125, -0.125, -0.125}, mgl64.Vec3{0.125, 0.125, 0.125})
+var bb = cube.Box(-0.125, -0.125, -0.125, 0.125, 0.125, 0.125)
 
 func (b Brush) Use(p *player.Player) {
 	const (
@@ -50,7 +49,7 @@ func (b Brush) Use(p *player.Player) {
 	pos := p.Position().Add(mgl64.Vec3{0, p.EyeHeight()})
 
 	final := pos.Add(vec)
-	if res, ok := trace.Perform(pos, final, p.World(), aabb, func(w world.Entity) bool { return w == p }); ok {
+	if res, ok := trace.Perform(pos, final, p.World(), bb, func(w world.Entity) bool { return w == p }); ok {
 		final = res.Position()
 	}
 

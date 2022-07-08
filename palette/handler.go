@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/df-mc/dragonfly/server/block/cube"
 	"github.com/df-mc/dragonfly/server/event"
+	"github.com/df-mc/dragonfly/server/item"
 	"github.com/df-mc/dragonfly/server/player"
 	"github.com/df-mc/we/internal/msg"
 	"github.com/go-gl/mathgl/mgl64"
@@ -63,7 +64,7 @@ func (h *Handler) HandleItemUseOnBlock(ctx *event.Context, pos cube.Pos, _ cube.
 }
 
 // HandleBlockBreak handles selection of a block for the palette.
-func (h *Handler) HandleBlockBreak(ctx *event.Context, pos cube.Pos) {
+func (h *Handler) HandleBlockBreak(ctx *event.Context, pos cube.Pos, _ *[]item.Stack) {
 	h.handleSelection(ctx, pos)
 }
 
@@ -112,7 +113,7 @@ func (h *Handler) visualisePalette() {
 				continue
 			}
 			a := m.Area
-			a.Min = a.Min.Subtract(unit)
+			a.Min = a.Min.Sub(unit)
 			a.Range(func(x, y, z int) {
 				i := 0
 				if x == a.Min[0] || x == a.Max[0] {

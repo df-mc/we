@@ -3,7 +3,6 @@ package brush
 import (
 	"github.com/df-mc/dragonfly/server/block/cube"
 	"github.com/df-mc/dragonfly/server/block/cube/trace"
-	"github.com/df-mc/dragonfly/server/entity"
 	"github.com/df-mc/dragonfly/server/item"
 	"github.com/df-mc/dragonfly/server/player"
 	"github.com/df-mc/dragonfly/server/world"
@@ -45,7 +44,7 @@ func (b Brush) Use(p *player.Player) {
 		maxDistance  = 128
 		maxUndoCount = 40
 	)
-	vec := entity.DirectionVector(p).Mul(maxDistance)
+	vec := p.Rotation().Vec3().Mul(maxDistance)
 	pos := p.Position().Add(mgl64.Vec3{0, p.EyeHeight()})
 
 	final := pos.Add(vec)
